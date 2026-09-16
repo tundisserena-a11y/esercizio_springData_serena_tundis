@@ -8,12 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase;
 import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase.Replace;
-import org.springframework.boot.test.context.SpringBootTest;
-
 import it.aulab.progetto_blog.models.Author;
 import it.aulab.progetto_blog.repositories.AuthorRepository;
 
-//@SpringBootTest
+// @SpringBootTest
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
