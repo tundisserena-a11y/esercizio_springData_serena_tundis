@@ -2,6 +2,7 @@ package it.aulab.progetto_blog.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -14,6 +15,8 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity // comunichiamo a spring che e presente la config di sicurezza
 public class SecurityConfig {
+    // attributo statico
+    private final static String cspDirectives = "default-src 'self' ; img-src 'self'; script-src 'self' cdn.jsdelivr.net 'unsafe-inline'; style-src 'self' cdn.jsdelivr.net ://cloudflare.com ; font-src ://cloudflare.com";
 
     // metodo di codifica
     @Bean
@@ -30,7 +33,6 @@ public class SecurityConfig {
         return new InMemoryUserDetailsManager(user.build(), admin.build());
     }
 
-    // Configura i filtri di sicurezza e le regole di accesso agli endpoint
     @Bean
     public SecurityFilterChain configSecurityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(
@@ -41,7 +43,13 @@ public class SecurityConfig {
                         .defaultSuccessUrl("/authors", true)
                         .permitAll())
                 .logout((logout) -> logout.logoutUrl("/logout")
-                        .logoutSuccessUrl("/"));
+                        .logoutSuccessUrl("/"))
+                .csrf(
+                        (csrf) -> csrf.ignoringRequestMatchers("/api/**")) // non chiede csrf da richieste api
+                .headers(
+                        (headers) -> headers.xssProtection(Customizer.withDefaults()) // protegge da attacchi xss
+                                .contentSecurityPolicy(Customizer.withDefaults())
+                                .contentSecurityPolicy((csp) -> csp.policyDirectives(cspDirectives)));
         return http.build();
     }
 
