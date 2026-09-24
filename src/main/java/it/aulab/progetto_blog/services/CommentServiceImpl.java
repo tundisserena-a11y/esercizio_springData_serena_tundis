@@ -28,7 +28,7 @@ public class CommentServiceImpl implements CommentService {
         // lista che conterra tutti gli oggetti comment convertiti in DTO
         List<CommentDto> dtos = new ArrayList<CommentDto>();
         for (Comment comment : commentRepository.findAll()) {
-            dtos.add(mapper.map(comment, CommentDto.class));
+            dtos.add(toDto(comment));
         }
         return dtos;
     }
@@ -38,7 +38,7 @@ public class CommentServiceImpl implements CommentService {
         // Cerco il commento tramite ID 
         Optional<Comment> optComment = commentRepository.findById(id);
         if (optComment.isPresent()) {
-            return mapper.map(optComment.get(), CommentDto.class);
+            return toDto(optComment.get());
         } else {
             // Se non lo trovo lancio la classica eccezione 404
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Comment id=" + id + " not found");
@@ -49,7 +49,7 @@ public class CommentServiceImpl implements CommentService {
     public CommentDto create(Comment comment) {
         if (comment.getEmail() == null || comment.getBody() == null)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        return mapper.map(commentRepository.save(comment), CommentDto.class);
+        return toDto(commentRepository.save(comment));
     }
 
     @Override
@@ -57,7 +57,7 @@ public class CommentServiceImpl implements CommentService {
         // Controllo se il commento esiste prima di modificarlo
         if (commentRepository.existsById(id)) {
             comment.setId(id);
-            return mapper.map(commentRepository.save(comment), CommentDto.class);
+            return toDto(commentRepository.save(comment));
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
@@ -71,5 +71,13 @@ public class CommentServiceImpl implements CommentService {
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Comment not found");
         }
+    }
+
+    private CommentDto toDto(Comment comment) {
+        CommentDto dto = mapper.map(comment, CommentDto.class);
+        if (comment.getPost() != null) {
+            dto.setPostId(comment.getPost().getId());
+        }
+        return dto;
     }
 }

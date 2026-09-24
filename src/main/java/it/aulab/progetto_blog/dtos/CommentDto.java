@@ -6,6 +6,7 @@ public class CommentDto {
     private String email;
     private String body;
     private String date;
+    private Long postId;
 
     // costruttore
     public CommentDto() {
@@ -42,5 +43,13 @@ public class CommentDto {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public Long getPostId() {
+        return postId;
+    }
+
+    public void setPostId(Long postId) {
+        this.postId = postId;
     }
 }

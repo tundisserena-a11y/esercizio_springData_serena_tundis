@@ -22,7 +22,7 @@ public class Comment {
     private String email;
     @Column(nullable = false, length = 200)
     private String body;
-    @Column(nullable = true, length = 8)
+    @Column(nullable = true, length = 10)
     private String date;
 
     @ManyToOne

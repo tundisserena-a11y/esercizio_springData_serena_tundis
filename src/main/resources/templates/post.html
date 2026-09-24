@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap css -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- CDN Font Awesome  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <title th:text="${title}">Tutti i Post</title>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <div class="row mb-4">
+            <div class="col-12 d-flex flex-column align-items-center text-center">
+                <h1 th:text="${title}">Tutti i Post</h1>
+                <div class="mt-2">
+
+                    <a th:href="@{/authors}" class="btn btn-outline-secondary m-2">Torna ad Autori</a>
+                    <a th:href="@{/comments}" class="btn btn-outline-secondary m-2">Vai ai Commenti</a>
+                    <a th:href="@{/posts/create}" class="btn btn-primary m-2">
+                        <i class="fa-solid fa-plus"></i> Aggiungi Post
+                    </a>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <table class="table table-striped table-responsive-lg align-middle">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Titolo</th>
+                            <th>Contenuto</th>
+                            <th>Data</th>
+                            <th>Autore</th>
+                            <th>Azioni</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="post : ${posts}">
+                            <td th:text="${post.id}"></td>
+                            <td th:text="${post.title}"></td>
+                            <td th:text="${post.body}"></td>
+                            <td th:text="${post.date}"></td>
+                            <td th:text="${post.authorFirstnameAndLastname}"></td>
+                            <td>
+                                <!-- La tabella ora è pulita, rimangono solo Modifica ed Elimina -->
+                                <a th:href="@{/posts/edit/{id}(id=${post.id})}" class="btn btn-sm btn-warning me-2">
+                                    Modifica
+                                </a>
+                                <a th:href="@{/posts/delete/{id}(id=${post.id})}" class="btn btn-sm btn-danger"
+                                    onclick="return confirm('Sei sicuro?');">
+                                    Elimina
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- Bootstrap JS  -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
